@@ -64,19 +64,47 @@ const terminalPortfolio = (() => {
       "Computer Networks"
     ].join("\n"),
     projects: [
-      "Projects",
-      "--------",
-      "+----+-------------------+-------------------------------------------+------------------------------+----------------------------------------------+---------------------------------------------------------------+",
-      "| ID | Project           | Brief                                     | Tech                         | Live                                         | GitHub                                                        |",
-      "+----+-------------------+-------------------------------------------+------------------------------+----------------------------------------------+---------------------------------------------------------------+",
-      "| 1  | Digital Diary     | Secure diary app with authentication      | React, Node.js, MongoDB, JWT| https://digital-diary-sneha.netlify.app/     | https://github.com/snehabichkunde/DigitalDiary               |",
-      "| 2  | my_shell          | POSIX-style shell for terminal workflows  | C, ncurses                   | -                                            | https://github.com/snehabichkunde/c-shell                    |",
-      "| 3  | Boids Flocking    | Real-time boids simulation and visuals    | p5.js, JavaScript            | https://snehabichkunde.github.io/Flocking-Simulation-using-Quadtree/ | https://github.com/snehabichkunde/Flocking-Simulation-using-Quadtree |",
-      "| 4  | Portfolio Terminal| CLI-style interactive portfolio           | JavaScript, HTML, CSS        | -                                            | https://github.com/snehabichkunde/Portfolio_Terminal         |",
-      "| 5  | Snake Game        | Classic snake game with collision logic   | C, SDL2                      | -                                            | https://github.com/your-username/your-snake-game-repo        |",
-      "+----+-------------------+-------------------------------------------+------------------------------+----------------------------------------------+---------------------------------------------------------------+"
+      "Use: cat projects/projects.txt"
     ].join("\n")
   };
+
+  const projectsData = [
+    {
+      name: "Digital Diary",
+      brief: "Secure diary app with authentication.",
+      tech: "React, Node.js, MongoDB, JWT",
+      live: "https://digital-diary-sneha.netlify.app/",
+      github: "https://github.com/snehabichkunde/DigitalDiary"
+    },
+    {
+      name: "my_shell",
+      brief: "POSIX-style shell for terminal workflows.",
+      tech: "C, ncurses",
+      live: null,
+      github: "https://github.com/snehabichkunde/c-shell"
+    },
+    {
+      name: "Boids Flocking",
+      brief: "Real-time boids simulation and visuals.",
+      tech: "p5.js, JavaScript",
+      live: "https://snehabichkunde.github.io/Flocking-Simulation-using-Quadtree/",
+      github: "https://github.com/snehabichkunde/Flocking-Simulation-using-Quadtree"
+    },
+    {
+      name: "Portfolio Terminal",
+      brief: "CLI-style interactive portfolio.",
+      tech: "JavaScript, HTML, CSS",
+      live: null,
+      github: "https://github.com/snehabichkunde/Portfolio_Terminal"
+    },
+    {
+      name: "Snake Game",
+      brief: "Classic snake game with collision logic.",
+      tech: "C, SDL2",
+      live: null,
+      github: "https://github.com/your-username/your-snake-game-repo"
+    }
+  ];
 
   // === VIRTUAL FILESYSTEM ===
   const createDir = (children = {}) => ({ type: "dir", children });
@@ -250,7 +278,7 @@ const terminalPortfolio = (() => {
       return entry.type === "dir" ? `${name}/` : name;
     });
 
-    const cols = 2;
+    const cols = window.innerWidth <= 600 ? 1 : 2;
     const rows = Math.ceil(displayNames.length / cols);
     const colWidth = Math.max(...displayNames.map((item) => item.length), 0) + 4;
     const lines = [];
@@ -282,6 +310,21 @@ const terminalPortfolio = (() => {
         sel.removeAllRanges();
         sel.addRange(range);
       }
+    }
+  }
+
+  function placeCaretAtEnd(el) {
+    if (!el) return;
+    el.focus();
+    try {
+      const sel = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch (_err) {
+      // Ignore caret placement failures on limited mobile browsers.
     }
   }
 
@@ -318,8 +361,34 @@ const terminalPortfolio = (() => {
       return `<span class="message">Binary file: ${escapeHtml(resolvedFilePath)} (use <span class="command">getcv</span> to download)</span>`;
     }
 
+    if (resolvedFilePath === "/home/sneha/projects/projects.txt") {
+      return formatProjectsOutput();
+    }
+
     const rawContent = fileNode.content || "";
     return `<span class="message">${linkifyEscapedText(escapeHtml(rawContent))}</span>`;
+  }
+
+  function getGithubIconSvg() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.58 2 12.23c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.5 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.9 1.57 2.36 1.12 2.94.85.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.72 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.35 1.9-1.32 2.74-1.05 2.74-1.05.55 1.42.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.95.68 1.92 0 1.38-.01 2.5-.01 2.84 0 .28.18.6.69.5A10.25 10.25 0 0 0 22 12.23C22 6.58 17.52 2 12 2z"/></svg>`;
+  }
+
+  function formatProjectsOutput() {
+    const isMobile = window.innerWidth <= 600;
+    const rows = projectsData.map((project) => {
+      const nameBlock = project.live
+        ? `<a href="${project.live}" class="link" target="_blank" rel="noopener noreferrer">${escapeHtml(project.name)}</a>`
+        : `<span class="message">${escapeHtml(project.name)}</span>`;
+      const githubBlock = project.github
+        ? `<a href="${project.github}" class="link" target="_blank" rel="noopener noreferrer" aria-label="GitHub ${escapeHtml(project.name)}">${getGithubIconSvg()}</a>`
+        : "";
+      if (isMobile) {
+        return `<div class="project-item-line">${nameBlock} ${githubBlock}</div>`;
+      }
+      return `<div class="project-item-rich"><div class="project-item-line">${nameBlock} ${githubBlock}</div><div class="project-item-meta">Tech: ${escapeHtml(project.tech)}</div><div class="project-item-meta">${escapeHtml(project.brief)}</div></div>`;
+    });
+
+    return `<div class="message">${rows.join("")}</div>`;
   }
 
   // === COMMANDS OBJECT ===
@@ -503,7 +572,7 @@ const terminalPortfolio = (() => {
   function typeOutput(output) {
     const outputDiv = document.createElement("div");
     outputDiv.className = "output";
-    outputDiv.innerHTML = output.trim().replace(/\n/g, "<br>");
+    outputDiv.innerHTML = output.trim();
     terminal.appendChild(outputDiv);
   }
 
@@ -664,7 +733,7 @@ const terminalPortfolio = (() => {
           const matches = Object.keys(commands).filter((cmd) => cmd.startsWith(commandToken));
           if (matches.length === 1) {
             desktopInput.textContent = `${matches[0]} `;
-            focusInput();
+            placeCaretAtEnd(desktopInput);
           } else if (matches.length > 1) {
             const commonPrefix = findLongestCommonPrefix(matches);
             if (desktopInput.textContent.trim() === commonPrefix) {
@@ -672,7 +741,7 @@ const terminalPortfolio = (() => {
               scrollToBottom();
             }
             desktopInput.textContent = commonPrefix;
-            focusInput();
+            placeCaretAtEnd(desktopInput);
           }
           return;
         }
@@ -694,7 +763,7 @@ const terminalPortfolio = (() => {
         if (matches.length === 0) return;
         if (matches.length === 1) {
           desktopInput.textContent = `${commandToken} ${matches[0]} `;
-          focusInput();
+          placeCaretAtEnd(desktopInput);
           return;
         }
 
@@ -705,7 +774,7 @@ const terminalPortfolio = (() => {
           scrollToBottom();
         }
         desktopInput.textContent = nextValue;
-        focusInput();
+        placeCaretAtEnd(desktopInput);
       }
     });
 

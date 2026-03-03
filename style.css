@@ -237,15 +237,15 @@ body {
   }
   
   #main {
-    padding-bottom: 70px;
+    padding-bottom: 1rem;
   }
   #desktop-prompt {
-    display: none;
+    display: flex;
   }
 
   /* Mobile Command Bar */
   #mobile-command-bar {
-    display: flex;
+    display: none;
     position: fixed;
     bottom: 0;
     left: 0;

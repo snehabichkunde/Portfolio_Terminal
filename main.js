@@ -270,16 +270,18 @@ const terminalPortfolio = (() => {
   }
 
   function focusInput() {
-    if (window.innerWidth <= 600) return;
     const desktopInput = document.querySelector("#desktop-prompt .input");
     if (desktopInput) {
       desktopInput.focus();
-      const sel = window.getSelection();
-      const range = document.createRange();
-      range.selectNodeContents(desktopInput);
-      range.collapse(false);
-      sel.removeAllRanges();
-      sel.addRange(range);
+      // Keep desktop caret behavior; mobile keyboards can behave poorly with forced ranges.
+      if (window.innerWidth > 600) {
+        const sel = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(desktopInput);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
     }
   }
 
@@ -492,10 +494,8 @@ const terminalPortfolio = (() => {
     document.removeEventListener("keydown", skipAnimation);
     document.removeEventListener("click", skipAnimation);
 
-    if (!isMobile) {
-      appendNewDesktopPrompt();
-      focusInput();
-    }
+    appendNewDesktopPrompt();
+    focusInput();
 
     scrollToBottom();
   }
@@ -508,7 +508,6 @@ const terminalPortfolio = (() => {
   }
 
   function appendNewDesktopPrompt() {
-    if (window.innerWidth <= 600) return;
     const newPrompt = document.createElement("div");
     newPrompt.className = "prompt-line";
     newPrompt.id = "desktop-prompt";
@@ -572,6 +571,7 @@ const terminalPortfolio = (() => {
 
   function populateMobileCommands(menu = "main") {
     if (!mobileCommandBar || window.innerWidth > 600) return;
+    mobileCommandBar.style.display = "none";
     mobileCommandBar.innerHTML = "";
 
     let commandsToShow;
@@ -625,7 +625,6 @@ const terminalPortfolio = (() => {
   // === EVENT LISTENERS ===
   function setupEventListeners() {
     terminal.addEventListener("keydown", async (e) => {
-      if (window.innerWidth <= 600) return;
       const desktopInput = document.querySelector("#desktop-prompt .input");
       if (!desktopInput) return;
 

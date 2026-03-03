@@ -1,61 +1,274 @@
 const terminalPortfolio = (() => {
   // === DOM ELEMENTS ===
   const terminal = document.getElementById("main");
-  const mobileCommandBar = document.getElementById('mobile-command-bar');
+  const mobileCommandBar = document.getElementById("mobile-command-bar");
 
   // === STATE ===
   let commandHistory = [];
   let historyIndex = -1;
   let currentInputBuffer = "";
 
-  // === CONTENT ===
+  // === TERMINAL FS STATE ===
+  const HOME_DIR = "/home/sneha";
+  let cwd = HOME_DIR;
+
+  // === CONTENT SOURCE ===
   const content = {
-    about: `{"name":"Sneha Bichkunde","email":"bichkundesneha@gmail.com","city":"Nanded","education":"B.Tech in Information Technology (8.3 GPA), SGGS Nanded","fun_fact":"I love exploring systems through terminal commands!"}`,
-    hobbies: `{"reading":"Drama, Philosophy, Travel Journals","sports":"Cycling, Badminton","programming":"Data Structures & Algorithms, C++, System Design"}`,
-    interests: `{"interests":"Backend Development, System Programming, Distributed Systems"}`,
-    technical_skills: `{"languages":"C, C++, JavaScript","tools":"Git, GitHub, Docker, VS Code, Bash, GDB, Makefile","frameworks":"Node.js, Express.js, React.js, Socket.io","databases":"MongoDB, MySQL","soft_skills":"Problem-solving, Teamwork, Communication, Time Management"}`,
-    coding_profiles: `{"GeeksforGeeks":"Active contributor with 500+ problems solved in Data Structures and Algorithms, https://www.geeksforgeeks.org/user/bichkund5ad6/","LeetCode":"Solved 100+ problems, focusing on algorithms and system design challenges, https://leetcode.com/u/SnehaBichkunde/"}`,
-    coursework: `{"coursework":"Operating Systems, Data Structures & Algorithms, DBMS, Computer Networks"}`,
-    projects: `[
-      { 
-        "name": "Digital Diary", 
-        "description": "A full-stack diary app to securely store and manage personal stories.",
-        "tech": "React.js, Node.js, MongoDB, JWT", 
-        "link": "https://digital-diary-sneha.netlify.app/", 
-        "github": "https://github.com/snehabichkunde/DigitalDiary" 
-      },
-      { 
-        "name": "my_shell", 
-        "description": "A POSIX-compliant shell in C to enhance terminal interaction.",
-        "tech": "C, ncurses", 
-        "github": "https://github.com/snehabichkunde/c-shell" 
-      },
-      { 
-        "name": "Boids Flocking", 
-        "description": "A flocking simulation in p5.js to model bird-like behavior.",
-        "tech": "p5.js, JavaScript", 
-        "link": "https://snehabichkunde.github.io/Flocking-Simulation-using-Quadtree/", 
-        "github": "https://github.com/snehabichkunde/Flocking-Simulation-using-Quadtree" 
-      },
-      { 
-        "name": "Portfolio Terminal", 
-        "description": "An interactive terminal-based portfolio to showcase my skills and projects. You're using it right now!",
-        "tech": "JavaScript, HTML, CSS", 
-        "github": "https://github.com/snehabichkunde/Portfolio_Terminal" 
-      },
-      { 
-        "name": "Snake Game", 
-        "description": "A classic Snake game built in C. The snake moves, eats apples to grow, and the game ends on collision.",
-        "tech": "C, SDL2", 
-        "github": "https://github.com/your-username/your-snake-game-repo" 
-      }
-    ]`,
+    about_me: [
+      "About Me",
+      "--------",
+      "Name: Sneha Bichkunde",
+      "Email: bichkundesneha@gmail.com",
+      "City: Nanded",
+      "Education: B.Tech in Information Technology (8.3 GPA), SGGS Nanded",
+      "Fun Fact: I love exploring systems through terminal commands!"
+    ].join("\n"),
+    hobbies: [
+      "Hobbies",
+      "-------",
+      "Reading: Drama, Philosophy, Travel Journals",
+      "Sports: Cycling, Badminton",
+      "Programming: Data Structures & Algorithms, C++, System Design"
+    ].join("\n"),
+    interests: [
+      "Interests",
+      "---------",
+      "Backend Development",
+      "System Programming",
+      "Distributed Systems"
+    ].join("\n"),
+    technical_skills: [
+      "Technical Skills",
+      "----------------",
+      "Languages: C, C++, JavaScript",
+      "Tools: Git, GitHub, Docker, VS Code, Bash, GDB, Makefile",
+      "Frameworks: Node.js, Express.js, React.js, Socket.io",
+      "Databases: MongoDB, MySQL",
+      "Soft Skills: Problem-solving, Teamwork, Communication, Time Management"
+    ].join("\n"),
+    coding_profile: [
+      "Coding Profile",
+      "--------------",
+      "GeeksforGeeks: Active contributor with 500+ problems solved in Data Structures and Algorithms",
+      "URL: https://www.geeksforgeeks.org/user/bichkund5ad6/",
+      "",
+      "LeetCode: Solved 100+ problems, focused on algorithms and system design",
+      "URL: https://leetcode.com/u/SnehaBichkunde/"
+    ].join("\n"),
+    coursework: [
+      "Coursework",
+      "----------",
+      "Operating Systems",
+      "Data Structures & Algorithms",
+      "DBMS",
+      "Computer Networks"
+    ].join("\n"),
+    projects: [
+      "Projects",
+      "--------",
+      "+----+-------------------+-------------------------------------------+------------------------------+----------------------------------------------+---------------------------------------------------------------+",
+      "| ID | Project           | Brief                                     | Tech                         | Live                                         | GitHub                                                        |",
+      "+----+-------------------+-------------------------------------------+------------------------------+----------------------------------------------+---------------------------------------------------------------+",
+      "| 1  | Digital Diary     | Secure diary app with authentication      | React, Node.js, MongoDB, JWT| https://digital-diary-sneha.netlify.app/     | https://github.com/snehabichkunde/DigitalDiary               |",
+      "| 2  | my_shell          | POSIX-style shell for terminal workflows  | C, ncurses                   | -                                            | https://github.com/snehabichkunde/c-shell                    |",
+      "| 3  | Boids Flocking    | Real-time boids simulation and visuals    | p5.js, JavaScript            | https://snehabichkunde.github.io/Flocking-Simulation-using-Quadtree/ | https://github.com/snehabichkunde/Flocking-Simulation-using-Quadtree |",
+      "| 4  | Portfolio Terminal| CLI-style interactive portfolio           | JavaScript, HTML, CSS        | -                                            | https://github.com/snehabichkunde/Portfolio_Terminal         |",
+      "| 5  | Snake Game        | Classic snake game with collision logic   | C, SDL2                      | -                                            | https://github.com/your-username/your-snake-game-repo        |",
+      "+----+-------------------+-------------------------------------------+------------------------------+----------------------------------------------+---------------------------------------------------------------+"
+    ].join("\n")
   };
-  
+
+  // === VIRTUAL FILESYSTEM ===
+  const createDir = (children = {}) => ({ type: "dir", children });
+  const createFile = (contentValue, options = {}) => ({ type: "file", content: contentValue, ...options });
+  const createThemeEntry = (name, brief) => ({ type: "theme", name, brief });
+
+  const fsTree = createDir({
+    home: createDir({
+      sneha: createDir({
+        "about_me.txt": createFile(content.about_me),
+        "hobbies.txt": createFile(content.hobbies),
+        "interests.txt": createFile(content.interests),
+        "coursework.txt": createFile(content.coursework),
+        skills: createDir({
+          "technical_skills.txt": createFile(content.technical_skills)
+        }),
+        coding_profile: createDir({
+          "coding_profile.txt": createFile(content.coding_profile)
+        }),
+        themes: createDir({
+          dark: createThemeEntry("dark", "High-contrast dark terminal theme for long sessions."),
+          light: createThemeEntry("light", "Bright theme with strong readability in daylight."),
+          matrix: createThemeEntry("matrix", "Green terminal aesthetic with matrix-inspired visuals."),
+          hello_kitty: createThemeEntry("hello_kitty", "Soft pink playful look with readable text contrast.")
+        }),
+        projects: createDir({
+          "projects.txt": createFile(content.projects)
+        }),
+        links: createDir({
+          "github.txt": createFile("https://github.com/snehabichkunde"),
+          "linkedin.txt": createFile("https://www.linkedin.com/in/sneha-bichkunde-aba203269/")
+        }),
+        "resume_sneha_bichkunde.pdf": createFile("PDF file", { binary: true })
+      })
+    })
+  });
+
+  const THEME_NAMES = ["dark", "light", "matrix", "hello_kitty"];
+
   // === HELPER FUNCTIONS ===
-  function getPrompt() { return `<span class="prompt">Sneha Bichkunde:~/portfolio$ </span>`; }
-  function scrollToBottom() { terminal.scrollTop = terminal.scrollHeight; }
-  
+  function getPrompt() {
+    return `<span class="prompt">sneha@portfolio:${getPromptPath()}$ </span>`;
+  }
+
+  function getPromptPath() {
+    if (cwd === HOME_DIR) return "~";
+    if (cwd.startsWith(`${HOME_DIR}/`)) return `~/${cwd.slice(HOME_DIR.length + 1)}`;
+    return cwd;
+  }
+
+  function scrollToBottom() {
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function linkifyEscapedText(escapedText) {
+    const urlRegex = /(https?:\/\/[^\s<]+)/g;
+    return escapedText.replace(
+      urlRegex,
+      '<a href="$1" class="link" target="_blank" rel="noopener noreferrer">$1</a>'
+    );
+  }
+
+  function normalizePath(path) {
+    const parts = path.split("/");
+    const stack = [];
+    for (const part of parts) {
+      if (!part || part === ".") continue;
+      if (part === "..") {
+        if (stack.length > 0) stack.pop();
+      } else {
+        stack.push(part);
+      }
+    }
+    return `/${stack.join("/")}`;
+  }
+
+  function resolvePath(inputPath = "") {
+    if (!inputPath || inputPath === "~") return HOME_DIR;
+
+    let path = inputPath;
+    if (path.startsWith("~")) {
+      path = path.replace(/^~/, HOME_DIR);
+    } else if (!path.startsWith("/")) {
+      path = `${cwd}/${path}`;
+    }
+    return normalizePath(path);
+  }
+
+  function getNodeByPath(path) {
+    if (path === "/") return fsTree;
+
+    const parts = path.split("/").filter(Boolean);
+    let current = fsTree;
+
+    for (const part of parts) {
+      if (!current || current.type !== "dir") return null;
+      current = current.children[part] || null;
+      if (!current) return null;
+    }
+
+    return current;
+  }
+
+  function tryResolveFilePath(target) {
+    if (!target) return null;
+
+    const directPath = resolvePath(target);
+    const directNode = getNodeByPath(directPath);
+    if (directNode && directNode.type === "file") return directPath;
+
+    const hasExtension = /\.[a-zA-Z0-9]+$/.test(target);
+    if (hasExtension) return null;
+
+    const fallbackExts = [".txt", ".md", ".json", ".url"];
+    for (const ext of fallbackExts) {
+      const candidatePath = resolvePath(`${target}${ext}`);
+      const candidateNode = getNodeByPath(candidatePath);
+      if (candidateNode && candidateNode.type === "file") return candidatePath;
+    }
+
+    return null;
+  }
+
+  function getPathCompletions(target, options = {}) {
+    const { dirOnly = false, fileOnly = false } = options;
+    const input = target || "";
+
+    let parentInput = "";
+    let namePrefix = input;
+    const slashIndex = input.lastIndexOf("/");
+    if (slashIndex >= 0) {
+      parentInput = input.slice(0, slashIndex + 1);
+      namePrefix = input.slice(slashIndex + 1);
+    }
+
+    const basePath = resolvePath(parentInput || ".");
+    const baseNode = getNodeByPath(basePath);
+    if (!baseNode || baseNode.type !== "dir") return [];
+
+    return Object.keys(baseNode.children)
+      .sort((a, b) => a.localeCompare(b))
+      .filter((name) => name.startsWith(namePrefix))
+      .filter((name) => {
+        const child = baseNode.children[name];
+        if (dirOnly) return child.type === "dir";
+        if (fileOnly) return child.type === "file";
+        return true;
+      })
+      .map((name) => {
+        const child = baseNode.children[name];
+        const suffix = child.type === "dir" ? "/" : "";
+        return `${parentInput}${name}${suffix}`;
+      });
+  }
+
+  function formatDirectoryList(dirNode) {
+    const entries = Object.keys(dirNode.children).sort((a, b) => a.localeCompare(b));
+    if (entries.length === 0) return `<span class="message">(empty)</span>`;
+
+    const displayNames = entries.map((name) => {
+      const entry = dirNode.children[name];
+      return entry.type === "dir" ? `${name}/` : name;
+    });
+
+    const cols = 2;
+    const rows = Math.ceil(displayNames.length / cols);
+    const colWidth = Math.max(...displayNames.map((item) => item.length), 0) + 4;
+    const lines = [];
+
+    for (let r = 0; r < rows; r++) {
+      let line = "";
+      for (let c = 0; c < cols; c++) {
+        const idx = r + c * rows;
+        if (idx >= displayNames.length) continue;
+        const item = displayNames[idx];
+        line += item.padEnd(colWidth, " ");
+      }
+      lines.push(line.trimEnd());
+    }
+
+    return `<pre class="message ls-grid">${escapeHtml(lines.join("\n"))}</pre>`;
+  }
+
   function focusInput() {
     if (window.innerWidth <= 600) return;
     const desktopInput = document.querySelector("#desktop-prompt .input");
@@ -70,39 +283,8 @@ const terminalPortfolio = (() => {
     }
   }
 
-  function formatProject(project) {
-    let output = `<div class="project-container">`;
-    output += `<span class="project-name">${project.name}</span><br>`;
-    output += `<span class="project-description">${project.description}</span><br>`;
-    output += `<span class="project-tech">Tech: ${project.tech}</span><br>`;
-    output += `<div class="project-links">`;
-    if (project.link) output += `<a href="${project.link}" class="link" target="_blank">Live Demo</a>`;
-    if (project.github) output += `<a href="${project.github}" class="link" target="_blank">GitHub</a>`;
-    output += `</div></div>`;
-    return output;
-  }
-
-  function formatLibrarySection(obj, title) {
-    let output = `<div class="library-container"><span class="library-title">${title}</span><br>`;
-    Object.keys(obj).forEach((key) => {
-      let value = obj[key];
-      let link = null;
-      if (typeof value === "string" && value.includes("http")) {
-        const parts = value.split(", ");
-        value = parts[0];
-        link = parts[1];
-      }
-      output += `<div class="library-item"><span class="library-key">${key.replace(/_/g, " ")}:</span>`;
-      output += `<span class="library-value">${value}</span>`;
-      if (link) output += `<a href="${link}" class="library-link" target="_blank">[Visit]</a>`;
-      output += `</div>`;
-    });
-    output += `</div>`;
-    return output;
-  }
-
   function suggestCommand(input) {
-    const suggestion = Object.keys(commands).find(cmd => {
+    const suggestion = Object.keys(commands).find((cmd) => {
       let diff = 0;
       for (let i = 0; i < Math.min(input.length, cmd.length); i++) {
         if (input[i] !== cmd[i]) diff++;
@@ -110,63 +292,92 @@ const terminalPortfolio = (() => {
       diff += Math.abs(input.length - cmd.length);
       return diff <= 2;
     });
-    return suggestion ? `<br><span class="suggest">Did you mean '<span class="command">${suggestion}</span>'?</span>` : "";
+    return suggestion
+      ? `<br><span class="suggest">Did you mean '<span class="command">${suggestion}</span>'?</span>`
+      : "";
   }
-  
+
+  function catFile(target) {
+    if (!target) {
+      return `<span class="error">Usage: cat &lt;file&gt;</span>`;
+    }
+
+    const resolvedFilePath = tryResolveFilePath(target);
+    if (!resolvedFilePath) {
+      return `<span class="error">cat: ${escapeHtml(target)}: No such file</span>`;
+    }
+
+    const fileNode = getNodeByPath(resolvedFilePath);
+    if (!fileNode || fileNode.type !== "file") {
+      return `<span class="error">cat: ${escapeHtml(target)}: Not a file</span>`;
+    }
+
+    if (fileNode.binary) {
+      return `<span class="message">Binary file: ${escapeHtml(resolvedFilePath)} (use <span class="command">getcv</span> to download)</span>`;
+    }
+
+    const rawContent = fileNode.content || "";
+    return `<span class="message">${linkifyEscapedText(escapeHtml(rawContent))}</span>`;
+  }
+
   // === COMMANDS OBJECT ===
   const commands = {
-    help: () => {
-      if (window.innerWidth <= 600) {
-        return `
-<span class="header">Explore Sneha's Portfolio</span>
-<span class="suggest">Tap a command chip to view:</span>
-- <span class="command">about-me</span>: Who I am
-- <span class="command">my-projects</span>: My projects
-- <span class="command">technical-skills</span>: My skills
-- <span class="command">getcv</span>: Download my CV
-- <span class="command">getgithub</span>: My GitHub
-- <span class="command">getlinkedin</span>: My LinkedIn
-- <span class="command">themes</span>: Change theme
-- <span class="command">clear</span>: Clear screen
-<span class="note">Scroll the chips below to see all commands.</span>
-`;
-      }
-      return `
-<span class="header">Available Commands</span>
-<span class="suggest">About Me & Work</span>
-- <span class="command">about-me</span>: Display information about me
-- <span class="command">my-projects</span>: Display my personal projects
-- <span class="command">technical-skills</span>: Show my technical skills
-- <span class="command">coursework</span>: List relevant university coursework
-- <span class="command">getcv</span>: Download my CV
-<span class="suggest">Profiles</span>
-- <span class="command">getgithub</span>: Open my GitHub profile
-- <span class="command">getlinkedin</span>: Open my LinkedIn profile
-- <span class="command">coding-profiles</span>: Show my coding profiles
-<span class="suggest">Utilities</span>
-- <span class="command">help</span>: Display this help message
-- <span class="command">history</span>: Show command history
-- <span class="command">clear</span>: Clear the terminal
-- <span class="command">themes</span>: Change the terminal theme
-<span class="note">On desktop, use ↑↓ arrows for history & Tab for auto-complete.</span>
-`;
-    },
+    help: () => [
+      '<span class="header">Terminal Portfolio Commands</span>',
+      '<span class="suggest">Navigate like a real terminal:</span>',
+      '- <span class="command">pwd</span>: Show current directory',
+      '- <span class="command">ls</span>: List folders/files (look for <span class="command">.txt</span> files)',
+      '- <span class="command">cd &lt;dir&gt;</span>: Move directory (supports <span class="command">..</span>, <span class="command">/</span>, <span class="command">~</span>)',
+      '- <span class="command">cat &lt;file&gt;</span>: Read a file (example: <span class="command">cat about_me</span> or <span class="command">cat about_me.txt</span>)',
+      '- <span class="command">theme &lt;name&gt;</span> (or <span class="command">themes &lt;name&gt;</span>): Change theme (' + THEME_NAMES.join(", ") + ')',
+      '',
+      '<span class="suggest">Autocomplete:</span>',
+      '- Press <span class="command">Tab</span> to autocomplete commands and paths for <span class="command">cd</span>, <span class="command">ls</span>, <span class="command">cat</span>',
+      '- <span class="command">theme</span> and <span class="command">themes</span> also support Tab autocomplete for theme names',
+      '- Use <span class="command">↑</span> and <span class="command">↓</span> to navigate command history',
+      '',
+      '<span class="suggest">Portfolio shortcuts:</span>',
+      '- <span class="command">getcv</span>, <span class="command">getgithub</span>, <span class="command">getlinkedin</span>',
+      '- <span class="command">history</span>, <span class="command">clear</span>',
+      '',
+      '<span class="note">Theme flow: <span class="command">cd themes</span> -> <span class="command">ls</span> -> <span class="command">matrix</span> (or any theme name).</span>'
+    ].join("\n"),
     clear: () => {
       terminal.innerHTML = "";
       return null;
     },
     history: () => {
       if (commandHistory.length === 0) return `<span class="message">No command history yet.</span>`;
-      return commandHistory.map((cmd, i) => `<span class="message">${i + 1}. ${cmd}</span>`).join("<br>");
+      return commandHistory.map((cmd, i) => `<span class="message">${i + 1}. ${escapeHtml(cmd)}</span>`).join("<br>");
     },
-    "about-me": () => formatLibrarySection(JSON.parse(content.about), "About Me"),
-    hobbies: () => formatLibrarySection(JSON.parse(content.hobbies), "Hobbies"),
-    interests: () => formatLibrarySection(JSON.parse(content.interests), "Interests"),
-    "technical-skills": () => formatLibrarySection(JSON.parse(content.technical_skills), "Technical Skills"),
-    "coding-profiles": () => formatLibrarySection(JSON.parse(content.coding_profiles), "Coding Profiles"),
-    coursework: () => formatLibrarySection(JSON.parse(content.coursework), "Coursework"),
-    "my-projects": () => JSON.parse(content.projects).map(formatProject).join(""),
-    "getcv": async () => {
+    pwd: () => `<span class="message">${escapeHtml(cwd)}</span>`,
+    ls: (args) => {
+      const targetPath = resolvePath(args[0] || ".");
+      const node = getNodeByPath(targetPath);
+      if (!node) return `<span class="error">ls: ${escapeHtml(args[0] || ".")}: No such file or directory</span>`;
+      if (node.type === "file" || node.type === "theme") return `<span class="message">${escapeHtml(targetPath.split("/").pop())}</span>`;
+      return formatDirectoryList(node);
+    },
+    cd: (args) => {
+      const targetPath = resolvePath(args[0] || "~");
+      const node = getNodeByPath(targetPath);
+      if (!node) return `<span class="error">cd: ${escapeHtml(args[0] || "~")}: No such file or directory</span>`;
+      if (node.type !== "dir") return `<span class="error">cd: ${escapeHtml(args[0] || "~")}: Not a directory</span>`;
+      cwd = targetPath;
+      return null;
+    },
+    cat: (args) => catFile(args.join(" ").trim()),
+
+    // Compatibility aliases
+    "about-me": () => catFile("about_me"),
+    hobbies: () => catFile("hobbies"),
+    interests: () => catFile("interests"),
+    "technical-skills": () => catFile("skills/technical_skills"),
+    "coding-profiles": () => catFile("coding_profile/coding_profile"),
+    coursework: () => catFile("coursework"),
+    "my-projects": () => catFile("projects/projects"),
+
+    getcv: async () => {
       const resumeUrl = "resume_sneha_bichkunde.pdf";
       try {
         const response = await fetch(resumeUrl);
@@ -187,95 +398,115 @@ const terminalPortfolio = (() => {
         window.URL.revokeObjectURL(url);
         return `<span class="message">Downloading CV... Please check your downloads folder!</span>`;
       } catch (error) {
-        console.error("CV Download failed:", error);
-        return `<span class="error">Error: Could not download CV. The file may be missing or inaccessible. Check console for details.</span>`;
+        console.error("CV download failed:", error);
+        return `<span class="error">Error: Could not download CV. The file may be missing or inaccessible.</span>`;
       }
     },
-    getlinkedin: () => { window.open("https://www.linkedin.com/in/sneha-bichkunde-aba203269/", "_blank"); return `<span class="message">Opening LinkedIn profile...</span>`; },
-    getgithub: () => { window.open("https://github.com/snehabichkunde", "_blank"); return `<span class="message">Opening GitHub profile...</span>`; },
+    getlinkedin: () => {
+      window.open("https://www.linkedin.com/in/sneha-bichkunde-aba203269/", "_blank");
+      return `<span class="message">Opening LinkedIn profile...</span>`;
+    },
+    getgithub: () => {
+      window.open("https://github.com/snehabichkunde", "_blank");
+      return `<span class="message">Opening GitHub profile...</span>`;
+    },
     themes: (args) => {
-      const validThemes = ["dark", "light", "matrix", "hello_kitty"];
-      if (!args[0]) { return `<span class="message">Available themes: ${validThemes.join(", ")}</span><br><span class="message">Usage: themes <theme-name></span>`; }
+      if (!args[0]) {
+        return `<span class="message">Available themes: ${THEME_NAMES.join(", ")}</span><br><span class="message">Usage: themes &lt;theme-name&gt;</span>`;
+      }
+
       const theme = args[0];
-      if (validThemes.includes(theme)) {
+      if (THEME_NAMES.includes(theme)) {
         document.body.className = `theme-${theme}`;
         localStorage.setItem("theme", theme);
         window.dispatchEvent(new CustomEvent("themeChanged", { detail: { theme } }));
-        return `<span class="message">Theme switched to ${theme}</span>`;
+        return `<span class="message">Theme switched to ${escapeHtml(theme)}</span>`;
       }
+
       return `<span class="error">Invalid theme.</span>`;
-    }
+    },
+    theme: (args) => commands.themes(args)
   };
-  
+
+  THEME_NAMES.forEach((themeName) => {
+    commands[themeName] = () => commands.themes([themeName]);
+  });
+
   // === CORE LOGIC ===
   async function typeWelcomeMessage() {
-    let welcomeMessage;
     const TYPING_SPEED_MS = 30;
     const isMobile = window.innerWidth <= 600;
 
-    if (isMobile) {
-      welcomeMessage = `
+    const welcomeMessage = isMobile
+      ? `
 <div class="message">Welcome to Sneha's Terminal Portfolio!</div>
-<div class="suggest">Start with the <span class="command">help</span> command below to explore my work. Scroll and tap the chips!</div>
-`;
-    } else {
-      welcomeMessage = `
+<div class="suggest">Start with the command <span class="command">help</span>.</div>
+`
+      : `
 <div class="message">Initializing session for user: guest...</div>
 <div class="message">Connection established.</div>
 <div class="header">Welcome to Sneha Bichkunde's digital space.</div>
-<div class="suggest">Run <span class="command">help</span> to see available documentation.</div>
+<div class="suggest">Start with the command <span class="command">help</span>.</div>
 `;
-    }
 
     let isTyping = true;
-    const skipAnimation = () => { isTyping = false; };
-    document.addEventListener('keydown', skipAnimation, { once: true });
-    document.addEventListener('click', skipAnimation, { once: true });
+    const skipAnimation = () => {
+      isTyping = false;
+    };
+
+    document.addEventListener("keydown", skipAnimation, { once: true });
+    document.addEventListener("click", skipAnimation, { once: true });
 
     const container = document.createElement("div");
     container.className = "output";
     terminal.appendChild(container);
 
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = welcomeMessage.trim();
 
     async function typeNode(node, parentEl) {
       if (!isTyping) return;
+
       if (node.nodeType === Node.TEXT_NODE) {
         for (const char of node.textContent) {
           if (!isTyping) break;
           parentEl.innerHTML += char;
-          await new Promise(r => setTimeout(r, TYPING_SPEED_MS));
+          await new Promise((r) => setTimeout(r, TYPING_SPEED_MS));
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const el = document.createElement(node.nodeName);
-        for(const attr of node.attributes) el.setAttribute(attr.name, attr.value);
+        for (const attr of node.attributes) el.setAttribute(attr.name, attr.value);
         parentEl.appendChild(el);
-        for (const child of node.childNodes) await typeNode(child, el);
+        for (const child of node.childNodes) {
+          await typeNode(child, el);
+        }
       }
     }
 
-    for (const node of tempDiv.childNodes) await typeNode(node, container);
+    for (const node of tempDiv.childNodes) {
+      await typeNode(node, container);
+    }
+
     if (!isTyping) container.innerHTML = welcomeMessage.trim();
-    
-    document.removeEventListener('keydown', skipAnimation);
-    document.removeEventListener('click', skipAnimation);
+
+    document.removeEventListener("keydown", skipAnimation);
+    document.removeEventListener("click", skipAnimation);
 
     if (!isMobile) {
       appendNewDesktopPrompt();
       focusInput();
     }
-    
+
     scrollToBottom();
   }
 
   function typeOutput(output) {
     const outputDiv = document.createElement("div");
     outputDiv.className = "output";
-    outputDiv.innerHTML = output.replace(/\n/g, "<br>");
+    outputDiv.innerHTML = output.trim().replace(/\n/g, "<br>");
     terminal.appendChild(outputDiv);
   }
-  
+
   function appendNewDesktopPrompt() {
     if (window.innerWidth <= 600) return;
     const newPrompt = document.createElement("div");
@@ -289,160 +520,198 @@ const terminalPortfolio = (() => {
     const trimmedCmd = commandStr.trim();
 
     const currentPrompt = document.getElementById("desktop-prompt");
-    if (currentPrompt) { // Deactivate and log the desktop command
-        currentPrompt.removeAttribute("id");
-        currentPrompt.querySelector('.input').textContent = trimmedCmd;
-        currentPrompt.querySelector('.input').contentEditable = "false";
-    } else { // Log mobile or initial command
-        const logLine = document.createElement('div');
-        logLine.className = 'prompt-line';
-        logLine.innerHTML = `${getPrompt()}<span class="executed-cmd">${trimmedCmd}</span>`;
-        terminal.appendChild(logLine);
+    if (currentPrompt) {
+      currentPrompt.removeAttribute("id");
+      currentPrompt.querySelector(".input").textContent = trimmedCmd;
+      currentPrompt.querySelector(".input").contentEditable = "false";
+    } else {
+      const logLine = document.createElement("div");
+      logLine.className = "prompt-line";
+      logLine.innerHTML = `${getPrompt()}<span class="executed-cmd">${escapeHtml(trimmedCmd)}</span>`;
+      terminal.appendChild(logLine);
     }
-    
+
     if (trimmedCmd) {
       commandHistory.push(trimmedCmd);
       historyIndex = commandHistory.length;
       currentInputBuffer = "";
     }
-    
-    const [command, ...args] = trimmedCmd.split(" ");
+
+    const parts = trimmedCmd.split(/\s+/).filter(Boolean);
+    const command = parts[0];
+    const args = parts.slice(1);
     let output;
 
     if (command && commands[command]) {
       output = await Promise.resolve(commands[command](args));
     } else if (command) {
-      output = `<span class="error">${command}: command not found</span>${suggestCommand(command)}`;
+      output = `<span class="error">${escapeHtml(command)}: command not found</span>${suggestCommand(command)}`;
     }
-    
-    if (output !== null) typeOutput(output);
+
+    if (output !== null && output !== undefined) typeOutput(output);
     appendNewDesktopPrompt();
     scrollToBottom();
     focusInput();
   }
-  
+
   // === MOBILE-SPECIFIC FUNCTIONS ===
   function handleDesktopRecommendation() {
     if (window.innerWidth > 600) return;
-    const banner = document.createElement('div');
-    banner.className = 'desktop-rec-banner';
+    const banner = document.createElement("div");
+    banner.className = "desktop-rec-banner";
     banner.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
       <p>For the full interactive experience, please view on a desktop.</p>
       <button class="close-banner-btn">×</button>
     `;
     terminal.prepend(banner);
-    banner.querySelector('.close-banner-btn').onclick = () => {
-      banner.style.display = 'none';
+    banner.querySelector(".close-banner-btn").onclick = () => {
+      banner.style.display = "none";
     };
   }
 
-  function populateMobileCommands(menu = 'main') {
+  function populateMobileCommands(menu = "main") {
     if (!mobileCommandBar || window.innerWidth > 600) return;
-    mobileCommandBar.innerHTML = '';
+    mobileCommandBar.innerHTML = "";
 
     let commandsToShow;
 
-    if (menu === 'themes') {
-      commandsToShow = ['dark', 'light', 'matrix', 'hello_kitty', 'back'];
+    if (menu === "themes") {
+      commandsToShow = [...THEME_NAMES, "back"];
     } else {
-      const priorityOrder = [
-        'help', // Moved help to the top
-        'about-me', 
-        'my-projects', 
-        'technical-skills',
-        'getcv',
-        'themes',
-        'clear'
+      commandsToShow = [
+        "help",
+        "ls",
+        "pwd",
+        "cat about_me",
+        "getcv",
+        "themes",
+        "clear"
       ];
-      const otherCommands = Object.keys(commands).filter(cmd => !priorityOrder.includes(cmd));
-      commandsToShow = [...priorityOrder, ...otherCommands];
     }
 
-    commandsToShow.forEach((cmd, index) => {
-      const chip = document.createElement('button');
-      chip.className = 'command-chip';
-      chip.textContent = cmd.replace(/-/g, ' ');
-      
-      // Add visual distinction for the first chip (help)
-      if (cmd === 'help' && menu === 'main') {
-        chip.classList.add('highlight-chip');
+    commandsToShow.forEach((cmd) => {
+      const chip = document.createElement("button");
+      chip.className = "command-chip";
+      chip.textContent = cmd.replace(/-/g, " ");
+
+      if (cmd === "help" && menu === "main") {
+        chip.classList.add("highlight-chip");
       }
 
-      if (cmd === 'back') {
-        chip.classList.add('back-chip');
-        chip.onclick = () => populateMobileCommands('main');
-      } else if (cmd === 'themes' && menu === 'main') {
-        chip.onclick = () => populateMobileCommands('themes');
-      } else if (menu === 'themes') {
+      if (cmd === "back") {
+        chip.classList.add("back-chip");
+        chip.onclick = () => populateMobileCommands("main");
+      } else if (cmd === "themes" && menu === "main") {
+        chip.onclick = () => populateMobileCommands("themes");
+      } else if (menu === "themes") {
         chip.onclick = () => {
           executeCommand(`themes ${cmd}`);
-          populateMobileCommands('main');
+          populateMobileCommands("main");
         };
       } else {
         chip.onclick = () => executeCommand(cmd);
       }
-      
+
       mobileCommandBar.appendChild(chip);
     });
 
-    // Add scroll indicator
-    const scrollIndicator = document.createElement('div');
-    scrollIndicator.className = 'scroll-indicator';
-    scrollIndicator.innerHTML = '<span>← Scroll for more →</span>';
+    const scrollIndicator = document.createElement("div");
+    scrollIndicator.className = "scroll-indicator";
+    scrollIndicator.innerHTML = "<span>← Scroll for more →</span>";
     mobileCommandBar.appendChild(scrollIndicator);
   }
 
   // === EVENT LISTENERS ===
   function setupEventListeners() {
     terminal.addEventListener("keydown", async (e) => {
-        if (window.innerWidth <= 600) return;
-        const desktopInput = document.querySelector("#desktop-prompt .input");
-        if (!desktopInput) return;
-        
-        if (e.key === "Enter") {
-            e.preventDefault();
-            await executeCommand(desktopInput.textContent);
-        } else if (e.key === "ArrowUp") {
-            e.preventDefault();
-            if (historyIndex > 0) {
-                if(historyIndex === commandHistory.length) currentInputBuffer = desktopInput.textContent;
-                historyIndex--;
-                desktopInput.textContent = commandHistory[historyIndex] || "";
-                focusInput();
-            }
-        } else if (e.key === "ArrowDown") {
-            e.preventDefault();
-            if (historyIndex < commandHistory.length - 1) {
-                historyIndex++;
-                desktopInput.textContent = commandHistory[historyIndex] || "";
-            } else {
-                historyIndex = commandHistory.length;
-                desktopInput.textContent = currentInputBuffer;
-            }
-            focusInput();
-        } else if (e.key === "Tab") {
-            e.preventDefault();
-            const inputText = desktopInput.textContent.trim();
-            if (!inputText) return;
-            const matches = Object.keys(commands).filter(cmd => cmd.startsWith(inputText));
-            if (matches.length === 1) {
-              desktopInput.textContent = matches[0] + " ";
-              focusInput();
-            } else if (matches.length > 1) {
-                const commonPrefix = findLongestCommonPrefix(matches);
-                if(desktopInput.textContent === commonPrefix) {
-                    typeOutput(`<div class="suggest">${matches.join("  ")}</div>`);
-                    scrollToBottom();
-                }
-                desktopInput.textContent = commonPrefix;
-                focusInput();
-            }
+      if (window.innerWidth <= 600) return;
+      const desktopInput = document.querySelector("#desktop-prompt .input");
+      if (!desktopInput) return;
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        await executeCommand(desktopInput.textContent);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (historyIndex > 0) {
+          if (historyIndex === commandHistory.length) currentInputBuffer = desktopInput.textContent;
+          historyIndex--;
+          desktopInput.textContent = commandHistory[historyIndex] || "";
+          focusInput();
         }
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (historyIndex < commandHistory.length - 1) {
+          historyIndex++;
+          desktopInput.textContent = commandHistory[historyIndex] || "";
+        } else {
+          historyIndex = commandHistory.length;
+          desktopInput.textContent = currentInputBuffer;
+        }
+        focusInput();
+      } else if (e.key === "Tab") {
+        e.preventDefault();
+        const rawInput = desktopInput.textContent;
+        const trimmedInput = rawInput.trim();
+        if (!trimmedInput) return;
+
+        const endsWithSpace = /\s$/.test(rawInput);
+        const tokens = trimmedInput.split(/\s+/);
+        const commandToken = tokens[0];
+        const completingCommand = tokens.length === 1 && !endsWithSpace;
+
+        if (completingCommand) {
+          const matches = Object.keys(commands).filter((cmd) => cmd.startsWith(commandToken));
+          if (matches.length === 1) {
+            desktopInput.textContent = `${matches[0]} `;
+            focusInput();
+          } else if (matches.length > 1) {
+            const commonPrefix = findLongestCommonPrefix(matches);
+            if (desktopInput.textContent.trim() === commonPrefix) {
+              typeOutput(`<div class="suggest">${matches.join("  ")}</div>`);
+              scrollToBottom();
+            }
+            desktopInput.textContent = commonPrefix;
+            focusInput();
+          }
+          return;
+        }
+
+        if (!(commandToken === "cd" || commandToken === "cat" || commandToken === "ls" || commandToken === "theme" || commandToken === "themes")) return;
+
+        const argPrefix = endsWithSpace ? "" : tokens[tokens.length - 1];
+        let matches = [];
+        if (commandToken === "cd") {
+          matches = getPathCompletions(argPrefix, { dirOnly: true });
+        } else if (commandToken === "cat") {
+          matches = getPathCompletions(argPrefix, { fileOnly: true });
+        } else if (commandToken === "theme" || commandToken === "themes") {
+          matches = THEME_NAMES.filter((name) => name.startsWith(argPrefix));
+        } else {
+          matches = getPathCompletions(argPrefix);
+        }
+
+        if (matches.length === 0) return;
+        if (matches.length === 1) {
+          desktopInput.textContent = `${commandToken} ${matches[0]} `;
+          focusInput();
+          return;
+        }
+
+        const commonPrefix = findLongestCommonPrefix(matches);
+        const nextValue = `${commandToken} ${commonPrefix}`;
+        if (desktopInput.textContent.trim() === nextValue.trim()) {
+          typeOutput(`<div class="suggest">${matches.join("  ")}</div>`);
+          scrollToBottom();
+        }
+        desktopInput.textContent = nextValue;
+        focusInput();
+      }
     });
-    
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('.terminal-wrapper') && !e.target.closest('a') && !e.target.closest('button')) {
+
+    document.addEventListener("click", (e) => {
+      if (e.target.closest(".terminal-wrapper") && !e.target.closest("a") && !e.target.closest("button")) {
         focusInput();
       }
     });
@@ -452,13 +721,15 @@ const terminalPortfolio = (() => {
   return {
     init: async () => {
       terminal.innerHTML = "";
+      cwd = HOME_DIR;
+
       const savedTheme = localStorage.getItem("theme") || "dark";
       document.body.className = `theme-${savedTheme}`;
-      
+
       handleDesktopRecommendation();
       populateMobileCommands();
       setupEventListeners();
-      
+
       await typeWelcomeMessage();
     }
   };
@@ -474,6 +745,6 @@ function findLongestCommonPrefix(strs) {
   return first.substring(0, i);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   terminalPortfolio.init();
 });

@@ -7,26 +7,26 @@
   ==============================================
 */
 :root {
-  --bg-body: #1e1e2e;
-  --bg-terminal: rgba(30, 30, 46, 0.9);
+  --bg-body: #151823;
+  --bg-terminal: rgba(17, 21, 32, 0.96);
   --bg-header: linear-gradient(to bottom, #45475a 0%, #313244 100%);
-  --border-terminal: rgba(205, 214, 244, 0.1);
-  --text-primary: #cdd6f4;
-  --text-secondary: #bac2de;
-  --text-title: #cdd6f4;
+  --border-terminal: rgba(205, 214, 244, 0.25);
+  --text-primary: #e8ecff;
+  --text-secondary: #cdd5f2;
+  --text-title: #f0f4ff;
   --text-header: #f9e2af; /* Yellow */
-  --text-prompt: #a6e3a1; /* Green */
-  --text-command: #fab387; /* Orange */
+  --text-prompt: #90f0b3; /* Green */
+  --text-command: #ffc896; /* Orange */
   --text-error: #f38ba8; /* Red */
-  --text-link: #cba6f7; /* Mauve */
-  --text-link-hover: #f5c2e7; /* Pink */
+  --text-link: #87d7ff; /* Cyan */
+  --text-link-hover: #c4ecff; /* Light Cyan */
   --text-suggestion: #f9e2af; /* Yellow */
   --accent-border: #fab387; /* Orange */
-  --library-bg: rgba(205, 214, 244, 0.05);
+  --library-bg: rgba(205, 214, 244, 0.09);
   --library-border: #89b4fa; /* Blue */
   --library-key: #f9e2af; /* Yellow */
-  --scrollbar-track: rgba(255, 255, 255, 0.05);
-  --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --scrollbar-track: rgba(255, 255, 255, 0.08);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.35);
   --caret-color: var(--text-prompt);
 }
 
@@ -124,6 +124,19 @@ body {
 #main .message { color: var(--text-primary); }
 #main .suggest { color: var(--text-suggestion); }
 #main .note { color: var(--text-secondary); font-style: italic; }
+#main .output,
+#main .message,
+#main .suggest,
+#main .note,
+#main .command,
+#main .header {
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+#main pre.message.ls-grid {
+  margin: 0;
+  white-space: pre;
+  font-family: inherit;
+}
 
 #main .link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-link); text-decoration: none; cursor: pointer; transition: color 0.2s; }
 #main .link:hover { text-decoration: underline; color: var(--text-link-hover); }
@@ -155,9 +168,9 @@ body {
     THEME DEFINITIONS
   ==============================================
 */
-.theme-light { --bg-body: #fdf6e3; --bg-terminal: rgba(253, 246, 227, 0.9); --bg-header: linear-gradient(to bottom, #eee8d5, #fdf6e3); --border-terminal: rgba(0, 0, 0, 0.1); --text-primary: #586e75; --text-secondary: #839496; --text-title: #073642; --text-header: #b58900; --text-prompt: #2aa198; --text-command: #cb4b16; --text-error: #dc322f; --text-link: #6c71c4; --text-link-hover: #d33682; --text-suggestion: #b58900; --accent-border: #cb4b16; --library-bg: rgba(7, 54, 66, 0.05); --library-border: #268bd2; --library-key: #b58900; --scrollbar-track: rgba(0, 0, 0, 0.05); --scrollbar-thumb: rgba(0, 0, 0, 0.2); --caret-color: var(--text-prompt); }
-.theme-matrix { --bg-body: #000; --bg-terminal: rgba(10, 10, 10, 0.9); --bg-header: linear-gradient(to bottom, #1a1a1a, #0a0a0a); --border-terminal: rgba(0, 255, 0, 0.2); --text-primary: #00ff41; --text-secondary: #00c732; --text-title: #00ff41; --text-header: #afff00; --text-prompt: #00ff41; --text-command: #50fa7b; --text-error: #ff5555; --text-link: #00f0a0; --text-link-hover: #00ffff; --text-suggestion: #afff00; --accent-border: #50fa7b; --library-bg: rgba(0, 255, 0, 0.05); --library-border: #00ff41; --library-key: #afff00; --scrollbar-track: rgba(0, 255, 0, 0.05); --scrollbar-thumb: rgba(0, 255, 0, 0.2); --caret-color: var(--text-prompt); }
-.theme-hello_kitty { --bg-body: #fff0f5; --bg-terminal: rgba(255, 240, 245, 0.9); --bg-header: linear-gradient(to bottom, #ffe4e1, #ffc1cc); --border-terminal: rgba(255, 182, 193, 0.4); --text-primary: #db7093; --text-secondary: #ff85a1; --text-title: #c71585; --text-header: #c71585; --text-prompt: #ff69b4; --text-command: #ff4500; --text-error: #dc143c; --text-link: #9370db; --text-link-hover: #c71585; --text-suggestion: #ff69b4; --accent-border: #ff69b4; --library-bg: rgba(219, 112, 147, 0.1); --library-border: #ffb6c1; --library-key: #ff4500; --scrollbar-track: rgba(219, 112, 147, 0.1); --scrollbar-thumb: rgba(219, 112, 147, 0.4); --caret-color: var(--text-prompt); }
+.theme-light { --bg-body: #f4efe0; --bg-terminal: rgba(253, 246, 227, 0.985); --bg-header: linear-gradient(to bottom, #efe6cc, #f7f1df); --border-terminal: rgba(0, 0, 0, 0.2); --text-primary: #22353d; --text-secondary: #334f59; --text-title: #102830; --text-header: #8d6100; --text-prompt: #0c7c70; --text-command: #8f340f; --text-error: #a01a26; --text-link: #20489f; --text-link-hover: #5f1a42; --text-suggestion: #7c5800; --accent-border: #9b4a1b; --library-bg: rgba(7, 54, 66, 0.12); --library-border: #1a6795; --library-key: #7c5800; --scrollbar-track: rgba(0, 0, 0, 0.1); --scrollbar-thumb: rgba(0, 0, 0, 0.36); --caret-color: var(--text-prompt); }
+.theme-matrix { --bg-body: #030603; --bg-terminal: rgba(6, 14, 6, 0.975); --bg-header: linear-gradient(to bottom, #113211, #071a07); --border-terminal: rgba(0, 255, 0, 0.4); --text-primary: #b1ffbd; --text-secondary: #89f19a; --text-title: #bfffcb; --text-header: #e0ff8d; --text-prompt: #7aff92; --text-command: #beff7a; --text-error: #ff8383; --text-link: #9dffd8; --text-link-hover: #dcfff2; --text-suggestion: #e1ff95; --accent-border: #8eff7f; --library-bg: rgba(0, 255, 0, 0.11); --library-border: #62ff76; --library-key: #e1ff95; --scrollbar-track: rgba(0, 255, 0, 0.1); --scrollbar-thumb: rgba(0, 255, 0, 0.34); --caret-color: var(--text-prompt); }
+.theme-hello_kitty { --bg-body: #ffeef4; --bg-terminal: rgba(255, 244, 249, 0.985); --bg-header: linear-gradient(to bottom, #ffd4df, #ffc6d6); --border-terminal: rgba(194, 69, 122, 0.4); --text-primary: #672245; --text-secondary: #803354; --text-title: #6d184a; --text-header: #911d61; --text-prompt: #ad256e; --text-command: #8f3200; --text-error: #a90f33; --text-link: #4c3ea3; --text-link-hover: #6e2478; --text-suggestion: #8d245a; --accent-border: #bf3f84; --library-bg: rgba(170, 38, 114, 0.14); --library-border: #cc5c97; --library-key: #932451; --scrollbar-track: rgba(170, 38, 114, 0.12); --scrollbar-thumb: rgba(170, 38, 114, 0.42); --caret-color: var(--text-prompt); }
 
 /* 
   ==============================================
